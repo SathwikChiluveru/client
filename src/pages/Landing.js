@@ -19,6 +19,7 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Collapse
 } from '@chakra-ui/react';
 import {
   FiHome,
@@ -38,7 +39,6 @@ import {
   BreadcrumbSeparator,
 } from '@chakra-ui/react';
 import "@fontsource/lexend-deca"; 
-import { color } from 'framer-motion';
 
 const LinkItems = [
   { name: 'Home', icon: FiHome },
@@ -92,89 +92,93 @@ const SidebarContent = ({ onClose, ...rest }) => {
 };
 
 const NavItem = ({ icon, children, subItems, ...rest }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
-
-  return (
-    <Box as="span" style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
-      {subItems ? (
-        <Menu>
-          <MenuButton
-            as={Flex}
-            align="center"
-            p="4"
-            mx="4"
-            borderRadius="lg"
-            role="group"
-            cursor="pointer"
-            _hover={{
-              bg: '#1A1E43',
-              color: 'white',
-            }}
-            onClick={toggleDropdown}
-            {...rest}
-          >
-            {icon && (
-              <Icon
-                mr="4"
-                fontSize="16"
-                _groupHover={{
-                  color: 'white',
-                }}
-                as={icon}
-              />
-            )}
-            {children}
-            <FiChevronDown />
-          </MenuButton>
-          {isOpen && (
-            <MenuList>
-              {subItems.map((subItem) => (
-                <MenuItem key={subItem.name} as="a" href="#">
-                  {subItem.name}
-                </MenuItem>
-              ))}
-            </MenuList>
-          )}
-        </Menu>
-      ) : (
-        <Box
-          as="a"
-          href="#"
-          _focus={{ boxShadow: 'none' }}
-        >
+    const [isOpen, setIsOpen] = useState(false);
+  
+    const toggleDropdown = () => {
+      setIsOpen(!isOpen);
+    };
+  
+    return (
+      <Box as="span" style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+        {subItems ? (
           <Flex
-            align="center"
-            p="4"
-            mx="4"
-            borderRadius="lg"
-            role="group"
-            cursor="pointer"
-            _hover={{
-              bg: '#1A1E43',
-              color: 'white',
-            }}
-            {...rest}
+            direction="column"
+            align="start"
+            _focus={{ boxShadow: 'none' }}
           >
-            {icon && (
-              <Icon
-                mr="4"
-                fontSize="16"
-                _groupHover={{
-                  color: 'white',
-                }}
-                as={icon}
-              />
-            )}
-            {children}
+            <Flex
+              align="center"
+              p="4"
+              mx="4"
+              borderRadius="lg"
+              role="group"
+              cursor="pointer"
+              _hover={{
+                bg: '#1A1E43',
+                color: 'white',
+              }}
+              onClick={toggleDropdown}
+              width="87%"
+              {...rest}
+            >
+              {icon && (
+                <Icon
+                  mr="4"
+                  fontSize="16"
+                  _groupHover={{
+                    color: 'white',
+                  }}
+                  as={icon}
+                />
+              )}
+              {children}
+              <FiChevronDown mr="10" />
+            </Flex>
+            <Collapse in={isOpen} animateOpacity>
+              <Box pl="8">
+                {subItems.map((subItem) => (
+                  <Box key={subItem.name} as="a" href="#">
+                    {subItem.name}
+                  </Box>
+                ))}
+              </Box>
+            </Collapse>
           </Flex>
-        </Box>
-      )}
-    </Box>
-  );
+        ) : (
+          <Box
+            as="a"
+            href="#"
+            _focus={{ boxShadow: 'none' }}
+          >
+            <Flex
+              align="center"
+              p="4"
+              mx="4"
+              borderRadius="lg"
+              role="group"
+              cursor="pointer"
+              _hover={{
+                bg: '#1A1E43',
+                color: 'white',
+              }}
+              {...rest}
+            >
+              {icon && (
+                <Icon
+                  mr="4"
+                  fontSize="16"
+                  _groupHover={{
+                    color: 'white',
+                  }}
+                  as={icon}
+                />
+              )}
+              {children}
+            </Flex>
+          </Box>
+        )}
+      </Box>
+    );
 };
 
 const MobileNav = ({ onOpen, ...rest }) => {
